@@ -268,12 +268,35 @@ const uploadFile = async () => {
     const formData = new FormData()
     formData.append('file', selectedFile.value)
 
-    const response = await fetch('http://localhost:8000/extract', {
+    // Gunakan proxy /api untuk menghindari CORS issue di development
+    const apiUrl = 'https://ekstrak-gold.vercel.app/extract'
+    
+    // Tambahkan headers jika diperlukan
+    const headers = {}
+    
+    // Jika ada API key di environment variable
+    const apiKey = import.meta.env.VITE_API_KEY
+    if (apiKey) {
+      headers['Authorization'] = `Bearer ${apiKey}`
+      // atau headers['X-API-Key'] = apiKey
+    }
+    
+    const response = await fetch(apiUrl, {
       method: 'POST',
+      mode: 'cors',
+      headers: headers,
       body: formData
     })
 
+    // Cek apakah response berhasil
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Error response:', errorText)
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
+    }
+
     const data = await response.json()
+    console.log('Response data:', data)
 
     if (data.success) {
       extractedData.value = data
@@ -281,8 +304,16 @@ const uploadFile = async () => {
       error.value = data.message || 'Gagal mengextract dokumen'
     }
   } catch (err) {
-    error.value = err.message || 'Terjadi kesalahan saat mengupload file'
     console.error('Upload error:', err)
+    
+    // Pesan error yang lebih deskriptif
+    if (err.message === 'Failed to fetch') {
+      error.value = 'Gagal terhubung ke server. Kemungkinan:\n• CORS policy blocked\n• API server tidak aktif\n• Koneksi internet bermasalah'
+    } else if (err.message.includes('HTTP error')) {
+      error.value = `Server error: ${err.message}`
+    } else {
+      error.value = err.message || 'Terjadi kesalahan saat mengupload file'
+    }
   } finally {
     isUploading.value = false
   }

@@ -1,41 +1,24 @@
 <template>
-  <div class="d-flex flex-column position-relative" style="padding-bottom: 120px;">
-    <!-- Timeline menggunakan Vuetify Components -->
-    <div class="d-flex align-stretch" style="height: 48px;">
+  <div class="timeline-wrapper">
+    <!-- Timeline Chevrons -->
+    <div class="chevron-container">
       <template v-for="(step, index) in steps" :key="index">
-        <div class="d-flex align-stretch" style="flex: 1; position: relative; z-index: 1;">
-          <v-card
-            :color="getStepColor(step.status)"
-            variant="flat"
-            class="d-flex align-center justify-center"
-            :style="getStepBoxStyle(index)"
-          >
-            <span :class="getStepTextClass(step.status)" class="text-caption font-weight-medium">{{ step.label }}</span>
-          </v-card>
-          <v-card
-            v-if="index < steps.length - 1"
-            :color="getArrowColor(step.status, index)"
-            variant="flat"
-            :style="getArrowStyle()"
-          ></v-card>
+        <div 
+          class="chevron-item"
+          :class="getChevronClass(step.status)"
+          :style="getChevronStyle(index)"
+        >
+          <span class="chevron-text">{{ step.label }}</span>
         </div>
       </template>
     </div>
 
-    <!-- Status Bubble menggunakan Vuetify Components -->
-    <div v-if="statusBubble" :style="bubblePosition" class="d-flex flex-column align-center position-absolute" style="top: 58px; transform: translateX(-50%); z-index: 10;">
-      <v-divider vertical :thickness="2" color="purple" length="18" class="mb-0"></v-divider>
-      <div class="d-flex align-center mt-n1">
-        <v-avatar size="6" color="purple" class="mr-2"></v-avatar>
-        <v-divider :thickness="2" color="purple" length="100" class="mr-2"></v-divider>
-        <v-chip
-          color="purple"
-          size="small"
-          class="text-white"
-        >
-          {{ statusBubble }}
-        </v-chip>
-      </div>
+    <!-- Status Bubble -->
+    <div v-if="statusBubble" :style="bubblePosition" class="bubble-wrapper">
+      <div class="bubble-line-vertical"></div>
+      <div class="bubble-dot"></div>
+      <div class="bubble-line-horizontal"></div>
+      <div class="bubble-text">{{ statusBubble }}</div>
     </div>
   </div>
 </template>
@@ -55,51 +38,23 @@ const props = defineProps({
   }
 })
 
-const getStepColor = (status) => {
-  if (status === 'active') return '#37474f'
-  if (status === 'completed') return '#4caf50'
-  return '#e0e0e0'
+const getChevronClass = (status) => {
+  if (status === 'active') return 'chevron-active'
+  if (status === 'completed') return 'chevron-completed'
+  return 'chevron-pending'
 }
 
-const getStepTextClass = (status) => {
-  if (status === 'active') return 'text-white'
-  if (status === 'completed') return 'text-white'
-  return 'text-grey-darken-1'
-}
-
-const getStepBoxStyle = (index) => {
+const getChevronStyle = (index) => {
   const isLast = index === props.steps.length - 1
   if (isLast) {
     return {
-      flex: 1,
-      height: '48px',
-      borderRadius: 0,
-      marginRight: 0
+      clipPath: 'none',
+      marginLeft: '-2px'
     }
   }
   return {
-    flex: 1,
-    height: '48px',
-    borderRadius: 0,
-    clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
-    marginRight: '-1px'
-  }
-}
-
-const getArrowColor = (stepStatus, index) => {
-  const activeIndex = props.steps.findIndex(s => s.status === 'active')
-  if (index < activeIndex) return '#4caf50'
-  if (index === activeIndex) return '#37474f'
-  return '#e0e0e0'
-}
-
-const getArrowStyle = () => {
-  return {
-    width: '24px',
-    height: '48px',
-    borderRadius: 0,
-    clipPath: 'polygon(0 0, 100% 50%, 0 100%)',
-    marginLeft: '-1px'
+    clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%)',
+    marginLeft: index === 0 ? '0' : '-2px'
   }
 }
 
@@ -115,3 +70,92 @@ const bubblePosition = computed(() => {
   }
 })
 </script>
+
+<style scoped>
+.timeline-wrapper {
+  position: relative;
+  padding-bottom: 100px;
+}
+
+.chevron-container {
+  display: flex;
+  align-items: stretch;
+  height: 50px;
+}
+
+.chevron-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  position: relative;
+}
+
+.chevron-text {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  z-index: 1;
+}
+
+.chevron-active {
+  background-color: #455a64;
+  color: white;
+}
+
+.chevron-completed {
+  background-color: #66bb6a;
+  color: white;
+}
+
+.chevron-pending {
+  background-color: #e0e0e0;
+  color: #757575;
+}
+
+.bubble-wrapper {
+  position: absolute;
+  top: 50px;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.bubble-line-vertical {
+  width: 2px;
+  height: 25px;
+  background-color: #9c27b0;
+  margin: 0 auto;
+}
+
+.bubble-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #9c27b0;
+  border-radius: 50%;
+  margin: 0 auto;
+  position: relative;
+  left: -3px;
+}
+
+.bubble-line-horizontal {
+  width: 120px;
+  height: 2px;
+  background-color: #9c27b0;
+  position: absolute;
+  top: 29px;
+  right: 4px;
+}
+
+.bubble-text {
+  position: absolute;
+  top: 20px;
+  right: 128px;
+  background-color: #9c27b0;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+</style>
