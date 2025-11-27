@@ -53,37 +53,37 @@
                       Compose
                     </v-btn>
                     
-                    <v-btn
-                      prepend-icon="mdi-refresh"
-                      color="primary"
-                      class="text-none"
-                      variant="elevated"
+                  <v-btn
+                    prepend-icon="mdi-refresh"
+                    color="primary"
+                    class="text-none"
+                    variant="elevated"
                       size="small"
-                    >
-                      Refresh
-                    </v-btn>
-                    
-                    <v-text-field
-                      v-model="searchKeyword"
-                      placeholder="Enter Keywords..."
-                      density="compact"
-                      variant="outlined"
-                      append-inner-icon="mdi-magnify"
-                      hide-details
+                  >
+                    Refresh
+                  </v-btn>
+                  
+                  <v-text-field
+                    v-model="searchKeyword"
+                    placeholder="Enter Keywords..."
+                    density="compact"
+                    variant="outlined"
+                    append-inner-icon="mdi-magnify"
+                    hide-details
                       class="search-field"
-                    ></v-text-field>
+                  ></v-text-field>
 
-                    <v-spacer></v-spacer>
+                  <v-spacer></v-spacer>
 
-                    <v-btn
+                  <v-btn
                       prepend-icon="mdi-pencil"
-                      color="primary"
-                      class="text-none"
-                      variant="elevated"
+                    color="primary"
+                    class="text-none"
+                    variant="elevated"
                       size="small"
-                    >
-                      Create Mail from Another
-                    </v-btn>
+                  >
+                    Create Mail from Another
+                  </v-btn>
                   </div>
                   
                   <div class="d-flex justify-end mt-1">
@@ -91,47 +91,47 @@
                       <span class="text-caption mr-2 text-grey-darken-1">10 -1000</span>
                       <v-btn icon size="small" variant="text" density="compact" color="grey-darken-1">
                         <v-icon size="small">mdi-chevron-left</v-icon>
-                      </v-btn>
+                    </v-btn>
                       <v-btn icon size="small" variant="text" density="compact" color="grey-darken-1">
                         <v-icon size="small">mdi-chevron-right</v-icon>
-                      </v-btn>
+                    </v-btn>
                     </div>
                   </div>
                 </div>
 
                 <div class="mail-table-wrapper">
                   <v-table class="mail-table" density="compact">
-                    <tbody>
-                      <tr
-                        v-for="(mail, index) in mails"
-                        :key="index"
-                        class="mail-row"
+                  <tbody>
+                    <tr
+                      v-for="(mail, index) in mails"
+                      :key="index"
+                      class="mail-row"
                         @click="openMailDetail(mail)"
-                      >
+                    >
                         <td style="width: 40px;" @click.stop>
                           <v-checkbox hide-details density="compact" color="primary"></v-checkbox>
-                        </td>
-                        <td style="width: 180px;">
+                      </td>
+                      <td style="width: 180px;">
                           <span class="font-weight-bold text-body-2">{{ mail.from }}</span>
-                        </td>
-                        <td>
+                      </td>
+                      <td>
                           <span class="text-body-2">{{ mail.subject }}</span>
-                        </td>
-                        <td style="width: 180px;" class="text-right">
+                      </td>
+                      <td style="width: 180px;" class="text-right">
                           <span class="text-body-2 text-grey-darken-1">{{ mail.date }}</span>
-                        </td>
-                        <td style="width: 40px;">
+                      </td>
+                      <td style="width: 40px;">
                           <v-btn icon size="small" variant="text" density="compact">
                             <v-icon size="small">mdi-chevron-right</v-icon>
-                          </v-btn>
-                        </td>
-                      </tr>
+                        </v-btn>
+                      </td>
+                    </tr>
                       <!-- Empty rows untuk spacing -->
                       <tr v-for="i in 5" :key="'empty-' + i" class="empty-row">
                         <td colspan="5" style="height: 48px; border-bottom: 1px solid #e0e0e0;"></td>
                       </tr>
-                    </tbody>
-                  </v-table>
+                  </tbody>
+                </v-table>
                 </div>
               </div>
             </div>

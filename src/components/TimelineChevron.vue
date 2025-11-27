@@ -17,8 +17,10 @@
     <div v-if="statusBubble" :style="bubblePosition" class="bubble-wrapper">
       <div class="bubble-line-vertical"></div>
       <div class="bubble-dot"></div>
-      <div class="bubble-line-horizontal"></div>
-      <div class="bubble-text">{{ statusBubble }}</div>
+      <div class="bubble-horizontal-group">
+        <div class="bubble-line-horizontal"></div>
+        <div class="bubble-text">{{ statusBubble }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,7 +68,7 @@ const bubblePosition = computed(() => {
   const leftPosition = (activeIndex * stepWidth) + (stepWidth / 2)
   
   return {
-    left: `${leftPosition}%`
+    left: `calc(${leftPosition}% - 1px)`
   }
 })
 </script>
@@ -117,45 +119,48 @@ const bubblePosition = computed(() => {
 .bubble-wrapper {
   position: absolute;
   top: 50px;
-  transform: translateX(-50%);
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .bubble-line-vertical {
   width: 2px;
-  height: 25px;
+  height: 35px;
   background-color: #9c27b0;
-  margin: 0 auto;
+  margin-left: 0;
 }
 
 .bubble-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background-color: #9c27b0;
   border-radius: 50%;
-  margin: 0 auto;
-  position: relative;
-  left: -3px;
+  margin-left: -4px;
+  margin-top: -2px;
+  margin-bottom: -2px;
+}
+
+.bubble-horizontal-group {
+  display: flex;
+  align-items: center;
+  margin-left: -4px;
 }
 
 .bubble-line-horizontal {
-  width: 120px;
+  width: 250px;
   height: 2px;
   background-color: #9c27b0;
-  position: absolute;
-  top: 29px;
-  right: 4px;
 }
 
 .bubble-text {
-  position: absolute;
-  top: 20px;
-  right: 128px;
   background-color: #9c27b0;
   color: white;
-  padding: 6px 12px;
-  border-radius: 16px;
+  padding: 8px 16px;
+  border-radius: 25px;
   font-size: 13px;
   white-space: nowrap;
+  margin-left: -1px;
 }
 </style>
