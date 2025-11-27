@@ -13,14 +13,12 @@
       </template>
     </div>
 
-    <!-- Status Bubble -->
-    <div v-if="statusBubble" :style="bubblePosition" class="bubble-wrapper">
-      <div class="bubble-line-vertical"></div>
-      <div class="bubble-dot"></div>
-      <div class="bubble-horizontal-group">
-        <div class="bubble-line-horizontal"></div>
-        <div class="bubble-text">{{ statusBubble }}</div>
-      </div>
+    <!-- Status Bubble - Simple Implementation -->
+    <div v-if="statusBubble" class="bubble-container" :style="bubblePosition">
+      <div class="vertical-line"></div>
+      <div class="corner-dot"></div>
+      <div class="horizontal-line"></div>
+      <div class="status-bubble">{{ statusBubble }}</div>
     </div>
   </div>
 </template>
@@ -48,21 +46,31 @@ const getChevronClass = (status) => {
 
 const getChevronStyle = (index) => {
   const isLast = index === props.steps.length - 1
+  const isFirst = index === 0
+  
   if (isLast) {
     return {
-      clipPath: 'none',
-      marginLeft: '-2px'
+      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 25px 50%)',
+      marginLeft: '-3px'
     }
   }
+  
+  if (isFirst) {
+    return {
+      clipPath: 'polygon(0 0, calc(100% - 25px) 0, 100% 50%, calc(100% - 25px) 100%, 0 100%, 25px 50%)',
+      marginLeft: '0'
+    }
+  }
+  
   return {
-    clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%)',
-    marginLeft: index === 0 ? '0' : '-2px'
+    clipPath: 'polygon(0 0, calc(100% - 25px) 0, 100% 50%, calc(100% - 25px) 100%, 0 100%, 25px 50%)',
+    marginLeft: '-3px'
   }
 }
 
 const bubblePosition = computed(() => {
   const activeIndex = props.steps.findIndex(step => step.status === 'active')
-  if (activeIndex === -1 || !props.statusBubble) return {}
+  if (activeIndex === -1 || !props.statusBubble) return { display: 'none' }
   
   const stepWidth = 100 / props.steps.length
   const leftPosition = (activeIndex * stepWidth) + (stepWidth / 2)
@@ -76,13 +84,13 @@ const bubblePosition = computed(() => {
 <style scoped>
 .timeline-wrapper {
   position: relative;
-  padding-bottom: 100px;
+  padding-bottom: 220px;
 }
 
 .chevron-container {
   display: flex;
   align-items: stretch;
-  height: 50px;
+  height: 55px;
 }
 
 .chevron-item {
@@ -90,15 +98,16 @@ const bubblePosition = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 24px;
+  padding: 0 30px;
   position: relative;
 }
 
 .chevron-text {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   text-align: center;
   z-index: 1;
+  line-height: 1.2;
 }
 
 .chevron-active {
@@ -116,51 +125,50 @@ const bubblePosition = computed(() => {
   color: #757575;
 }
 
-.bubble-wrapper {
+.bubble-container {
   position: absolute;
-  top: 50px;
+  top: 55px;
   z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 }
 
-.bubble-line-vertical {
+.vertical-line {
   width: 2px;
-  height: 35px;
+  height: 200px;
   background-color: #9c27b0;
-  margin-left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.bubble-dot {
+.corner-dot {
   width: 10px;
   height: 10px;
   background-color: #9c27b0;
   border-radius: 50%;
-  margin-left: -4px;
-  margin-top: -2px;
-  margin-bottom: -2px;
+  position: absolute;
+  top: 199px;
+  left: -4px;
 }
 
-.bubble-horizontal-group {
-  display: flex;
-  align-items: center;
-  margin-left: -4px;
-}
-
-.bubble-line-horizontal {
-  width: 250px;
+.horizontal-line {
+  width: 680px;
   height: 2px;
   background-color: #9c27b0;
+  position: absolute;
+  top: 204px;
+  left: 6px;
 }
 
-.bubble-text {
+.status-bubble {
   background-color: #9c27b0;
   color: white;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 13px;
+  padding: 12px 26px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 500;
   white-space: nowrap;
-  margin-left: -1px;
+  position: absolute;
+  top: 186px;
+  left: 680px;
 }
 </style>
