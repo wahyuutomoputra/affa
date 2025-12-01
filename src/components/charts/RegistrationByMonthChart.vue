@@ -2,7 +2,7 @@
   <Line :data="chartData" :options="chartOptions" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -13,7 +13,8 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  type ChartOptions
 } from 'chart.js'
 
 ChartJS.register(
@@ -51,7 +52,7 @@ const chartData = {
   ]
 }
 
-const chartOptions = {
+const chartOptions: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {

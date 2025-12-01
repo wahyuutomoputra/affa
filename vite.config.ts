@@ -20,8 +20,9 @@ export default defineConfig({
       '/api': {
         target: 'https://ekstrak-lnik8dxy5-wahyuutomoputras-projects.vercel.app',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: (path: string) => path.replace(/^\/api/, '')
       }
     }
   }
 })
+

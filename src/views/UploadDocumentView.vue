@@ -113,8 +113,8 @@
                   <v-expansion-panel-text>
                     <v-simple-table>
                       <tbody>
-                        <tr v-for="(value, key) in extractedData.data.application_data" :key="key">
-                          <td class="font-weight-bold" style="width: 200px;">{{ formatKey(key) }}</td>
+                        <tr v-for="(value, key) in extractedData.data.application_data" :key="String(key)">
+                          <td class="font-weight-bold" style="width: 200px;">{{ formatKey(String(key)) }}</td>
                           <td>{{ value }}</td>
                         </tr>
                       </tbody>
@@ -131,8 +131,8 @@
                   <v-expansion-panel-text>
                     <v-simple-table>
                       <tbody>
-                        <tr v-for="(value, key) in extractedData.data.mark_data" :key="key">
-                          <td class="font-weight-bold" style="width: 200px;">{{ formatKey(key) }}</td>
+                        <tr v-for="(value, key) in extractedData.data.mark_data" :key="String(key)">
+                          <td class="font-weight-bold" style="width: 200px;">{{ formatKey(String(key)) }}</td>
                           <td>{{ value || '-' }}</td>
                         </tr>
                       </tbody>
@@ -149,8 +149,8 @@
                   <v-expansion-panel-text>
                     <v-simple-table>
                       <tbody>
-                        <tr v-for="(value, key) in extractedData.data.applicant_data" :key="key">
-                          <td class="font-weight-bold" style="width: 200px;">{{ formatKey(key) }}</td>
+                        <tr v-for="(value, key) in extractedData.data.applicant_data" :key="String(key)">
+                          <td class="font-weight-bold" style="width: 200px;">{{ formatKey(String(key)) }}</td>
                           <td>{{ value }}</td>
                         </tr>
                       </tbody>
@@ -197,22 +197,23 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
-const fileInput = ref(null)
-const selectedFile = ref(null)
-const isUploading = ref(false)
-const extractedData = ref(null)
-const error = ref(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+const selectedFile = ref<File | null>(null)
+const isUploading = ref<boolean>(false)
+const extractedData = ref<any>(null)
+const error = ref<string | null>(null)
 
-const triggerFileUpload = () => {
+const triggerFileUpload = (): void => {
   fileInput.value?.click()
 }
 
-const handleFileSelect = (event) => {
-  const file = event.target.files[0]
+const handleFileSelect = (event: Event): void => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
   if (file) {
     selectedFile.value = file
     error.value = null
@@ -220,9 +221,9 @@ const handleFileSelect = (event) => {
   }
 }
 
-const handleDrop = (event) => {
+const handleDrop = (event: DragEvent): void => {
   event.preventDefault()
-  const file = event.dataTransfer.files[0]
+  const file = event.dataTransfer?.files[0]
   if (file) {
     selectedFile.value = file
     error.value = null
@@ -230,19 +231,19 @@ const handleDrop = (event) => {
   }
 }
 
-const clearFile = () => {
+const clearFile = (): void => {
   selectedFile.value = null
   if (fileInput.value) {
     fileInput.value.value = ''
   }
 }
 
-const clearResult = () => {
+const clearResult = (): void => {
   extractedData.value = null
   error.value = null
 }
 
-const formatFileSize = (bytes) => {
+const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 Bytes'
   const k = 1024
   const sizes = ['Bytes', 'KB', 'MB', 'GB']
@@ -250,14 +251,14 @@ const formatFileSize = (bytes) => {
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
 }
 
-const formatKey = (key) => {
+const formatKey = (key: string): string => {
   return key
     .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 }
 
-const uploadFile = async () => {
+const uploadFile = async (): Promise<void> => {
   if (!selectedFile.value) return
 
   isUploading.value = true
@@ -272,7 +273,7 @@ const uploadFile = async () => {
     const apiUrl = 'https://ekstrak-gold.vercel.app/extract'
     
     // Tambahkan headers jika diperlukan
-    const headers = {}
+    const headers: Record<string, string> = {}
     
     // Jika ada API key di environment variable
     const apiKey = import.meta.env.VITE_API_KEY
@@ -307,12 +308,13 @@ const uploadFile = async () => {
     console.error('Upload error:', err)
     
     // Pesan error yang lebih deskriptif
-    if (err.message === 'Failed to fetch') {
+    const errorMessage = err instanceof Error ? err.message : String(err)
+    if (errorMessage === 'Failed to fetch') {
       error.value = 'Gagal terhubung ke server. Kemungkinan:\n• CORS policy blocked\n• API server tidak aktif\n• Koneksi internet bermasalah'
-    } else if (err.message.includes('HTTP error')) {
-      error.value = `Server error: ${err.message}`
+    } else if (errorMessage.includes('HTTP error')) {
+      error.value = `Server error: ${errorMessage}`
     } else {
-      error.value = err.message || 'Terjadi kesalahan saat mengupload file'
+      error.value = errorMessage || 'Terjadi kesalahan saat mengupload file'
     }
   } finally {
     isUploading.value = false

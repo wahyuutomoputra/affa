@@ -23,28 +23,30 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 
-const props = defineProps({
-  steps: {
-    type: Array,
-    required: true,
-    default: () => []
-  },
-  statusBubble: {
-    type: String,
-    default: null
-  }
+interface Step {
+  label: string
+  status: 'active' | 'completed' | 'pending'
+}
+
+interface Props {
+  steps: Step[]
+  statusBubble?: string | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  statusBubble: null
 })
 
-const getChevronClass = (status) => {
+const getChevronClass = (status: string): string => {
   if (status === 'active') return 'chevron-active'
   if (status === 'completed') return 'chevron-completed'
   return 'chevron-pending'
 }
 
-const getChevronStyle = (index) => {
+const getChevronStyle = (index: number): Record<string, string> => {
   const isLast = index === props.steps.length - 1
   const isFirst = index === 0
   
@@ -68,7 +70,7 @@ const getChevronStyle = (index) => {
   }
 }
 
-const bubblePosition = computed(() => {
+const bubblePosition = computed((): Record<string, string> => {
   const activeIndex = props.steps.findIndex(step => step.status === 'active')
   if (activeIndex === -1 || !props.statusBubble) return { display: 'none' }
   

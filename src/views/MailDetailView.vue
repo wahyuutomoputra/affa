@@ -65,23 +65,30 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
+interface MailData {
+  from: string
+  subject: string
+  date: string
+  body: string
+}
+
 const route = useRoute()
 const router = useRouter()
-const activeTab = ref('mail')
+const activeTab = ref<string>('mail')
 
-const mailData = ref({
+const mailData = ref<MailData>({
   from: 'IPP MASTER',
   subject: 'Please file our new applicaiton',
   date: 'November 10, 2025',
   body: 'Please file our new application for trademark registration.'
 })
 
-const goToAttachWMS = () => {
+const goToAttachWMS = (): void => {
   router.push(`/my-task/mail/${route.params.id}/attach`)
 }
 

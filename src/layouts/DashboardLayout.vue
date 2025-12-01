@@ -65,12 +65,18 @@
   </v-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
-const drawer = ref(true)
+interface MenuItem {
+  title: string
+  icon: string
+  to: string
+}
 
-const menuItems = [
+const drawer = ref<boolean>(true)
+
+const menuItems: MenuItem[] = [
   { title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard' },
   { title: 'My Task', icon: 'mdi-clipboard-text', to: '/my-task' },
   { title: 'Trademark', icon: 'mdi-trademark', to: '/trademark' },

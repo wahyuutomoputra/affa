@@ -2,7 +2,7 @@
   <Bar :data="chartData" :options="chartOptions" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -11,7 +11,8 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  type ChartOptions
 } from 'chart.js'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
@@ -32,7 +33,7 @@ const chartData = {
   ]
 }
 
-const chartOptions = {
+const chartOptions: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {

@@ -310,7 +310,7 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import RegistrationByMonthChart from '@/components/charts/RegistrationByMonthChart.vue'
@@ -331,8 +331,8 @@ import BacklogAmountChart from '@/components/charts/BacklogAmountChart.vue'
 import SuccessRateChart from '@/components/charts/SuccessRateChart.vue'
 import Top5ClientChart from '@/components/charts/Top5ClientChart.vue'
 
-const trademarkExpanded = ref(true)
-const businessExpanded = ref(true)
-const projectExpanded = ref(true)
-const fidelityExpanded = ref(true)
+const trademarkExpanded = ref<boolean>(true)
+const businessExpanded = ref<boolean>(true)
+const projectExpanded = ref<boolean>(true)
+const fidelityExpanded = ref<boolean>(true)
 </script>

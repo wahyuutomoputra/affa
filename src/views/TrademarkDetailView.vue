@@ -46,17 +46,22 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import TimelineChevron from '@/components/TimelineChevron.vue'
 
-const route = useRoute()
-const activeTab = ref('status')
-const refNumber = ref('')
+interface StatusStage {
+  label: string
+  status: 'active' | 'completed' | 'pending'
+}
 
-const statusStages = ref([
+const route = useRoute()
+const activeTab = ref<string>('status')
+const refNumber = ref<string>('')
+
+const statusStages = ref<StatusStage[]>([
   {
     label: 'New Instruction',
     status: 'active'
@@ -79,7 +84,7 @@ const statusStages = ref([
   }
 ])
 
-const currentStatusBubble = computed(() => {
+const currentStatusBubble = computed<string | null>(() => {
   const activeStage = statusStages.value.find(stage => stage.status === 'active')
   if (activeStage?.label === 'New Instruction') {
     return 'Waiting for final instruction'
@@ -90,7 +95,9 @@ const currentStatusBubble = computed(() => {
 
 onMounted(() => {
   // Get ref number from route params
-  refNumber.value = route.params.refNumber || route.query.refNumber || 'xxxxxxxx'
+  const refParam = route.params.refNumber as string
+  const refQuery = route.query.refNumber as string
+  refNumber.value = refParam || refQuery || 'xxxxxxxx'
 })
 </script>
 

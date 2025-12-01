@@ -149,19 +149,27 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
+interface Mail {
+  id: number
+  from: string
+  subject: string
+  date: string
+  body: string
+}
+
 const router = useRouter()
-const activeTab = ref('mail')
-const selectedFolder = ref('Inbox')
-const searchKeyword = ref('')
+const activeTab = ref<string>('mail')
+const selectedFolder = ref<string>('Inbox')
+const searchKeyword = ref<string>('')
 
-const mailFolders = ['Inbox', 'Sent', 'Drafts', 'Spam']
+const mailFolders: string[] = ['Inbox', 'Sent', 'Drafts', 'Spam']
 
-const mails = [
+const mails: Mail[] = [
   {
     id: 1,
     from: 'IPP MASTER',
@@ -171,7 +179,7 @@ const mails = [
   }
 ]
 
-const openMailDetail = (mail) => {
+const openMailDetail = (mail: Mail): void => {
   router.push(`/my-task/mail/${mail.id}`)
 }
 </script>

@@ -103,6 +103,7 @@
                         append-inner-icon="mdi-chevron-down"
                         hide-details
                         style="max-width: 150px;"
+                        clearable
                       ></v-select>
                       
                       <v-select
@@ -113,6 +114,7 @@
                         append-inner-icon="mdi-chevron-down"
                         hide-details
                         style="max-width: 150px;"
+                        clearable
                       ></v-select>
                       
                       <v-btn
@@ -143,6 +145,7 @@
                         append-inner-icon="mdi-chevron-down"
                         hide-details
                         style="max-width: 150px;"
+                        clearable
                       ></v-select>
                       
                       <v-text-field
@@ -161,6 +164,7 @@
                         append-inner-icon="mdi-chevron-down"
                         hide-details
                         style="max-width: 150px;"
+                        clearable
                       ></v-select>
                     </div>
                   </div>
@@ -349,31 +353,31 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 const router = useRouter()
-const activeTab = ref('portfolio')
-const searchKeyword = ref('')
-const itemsPerPage = ref(25)
-const currentPage = ref(1)
-const advanceSearchExpanded = ref(false)
-const searchField1 = ref('')
-const searchDate1 = ref('')
-const searchDate2 = ref('')
-const searchField2 = ref('')
-const searchField3 = ref('')
-const searchField4 = ref('')
-const searchField5 = ref('')
-const searchField6 = ref('')
+const activeTab = ref<string>('portfolio')
+const searchKeyword = ref<string>('')
+const itemsPerPage = ref<number>(25)
+const currentPage = ref<number>(1)
+const advanceSearchExpanded = ref<boolean>(false)
+const searchField1 = ref<string>('')
+const searchDate1 = ref<string>('')
+const searchDate2 = ref<string>('')
+const searchField2 = ref(null as any)
+const searchField3 = ref(null as any)
+const searchField4 = ref(null as any)
+const searchField5 = ref<string>('')
+const searchField6 = ref(null as any)
 
-const toggleAdvanceSearch = () => {
+const toggleAdvanceSearch = (): void => {
   advanceSearchExpanded.value = !advanceSearchExpanded.value
 }
 
-const goToTrademarkDetail = (refNumber) => {
+const goToTrademarkDetail = (refNumber: string): void => {
   router.push(`/trademark/${refNumber}`)
 }
 

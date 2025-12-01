@@ -140,23 +140,23 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const username = ref('')
-const password = ref('')
-const showPassword = ref(false)
+const username = ref<string>('')
+const password = ref<string>('')
+const showPassword = ref<boolean>(false)
 
-const handleLogin = () => {
+const handleLogin = (): void => {
   // Implementasi login logic di sini
   console.log('Login attempt:', { username: username.value, password: password.value })
   // Redirect ke dashboard
   router.push('/dashboard')
 }
 
-const handleGoogleLogin = () => {
+const handleGoogleLogin = (): void => {
   // Implementasi Google OAuth di sini
   console.log('Google login attempt')
 }

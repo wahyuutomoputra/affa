@@ -296,16 +296,44 @@
   </DashboardLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router' // Unused for now
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
-const route = useRoute()
-const activeTab = ref('mail')
-const fileInput = ref(null)
+interface FormData {
+  projectCategory: string
+  associateName: string
+  ourReferenceNumber: string
+  mailDate: string
+  mailType: string
+  mailSubject: string
+  furtherNextAction: string | null
+  from: string
+  company: string
+  clientReferenceNumber: string
+  receiptDate: string
+  applicationType: string
+  urgent: boolean
+  mailDescription: string
+  singleApplication: boolean
+  multipleApplication: boolean
+}
 
-const formData = ref({
+interface Application {
+  ourReferenceNumber: string
+  class: string
+  priorityNumber: string
+  priorityDate: string
+  deadline: string
+  country: string
+}
+
+// const route = useRoute() // Unused for now, will be used when fetching mail data
+const activeTab = ref<string>('mail')
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const formData = ref<FormData>({
   projectCategory: 'New Project',
   associateName: 'IPP MASTER',
   ourReferenceNumber: '',
@@ -324,7 +352,7 @@ const formData = ref({
   multipleApplication: false
 })
 
-const applications = ref([
+const applications = ref<Application[]>([
   {
     ourReferenceNumber: '',
     class: '',
@@ -335,7 +363,7 @@ const applications = ref([
   }
 ])
 
-const addApplication = () => {
+const addApplication = (): void => {
   applications.value.push({
     ourReferenceNumber: '',
     class: '',
@@ -346,23 +374,24 @@ const addApplication = () => {
   })
 }
 
-const removeApplication = (index) => {
+const removeApplication = (index: number): void => {
   if (applications.value.length > 1) {
     applications.value.splice(index, 1)
   }
 }
 
-const triggerFileUpload = () => {
+const triggerFileUpload = (): void => {
   fileInput.value?.click()
 }
 
-const handleFileUpload = (event) => {
-  const files = event.target.files
+const handleFileUpload = (event: Event): void => {
+  const target = event.target as HTMLInputElement
+  const files = target.files
   // Handle file upload logic here
   console.log('Files selected:', files)
 }
 
-const saveForm = () => {
+const saveForm = (): void => {
   // Handle save logic here
   console.log('Form data:', formData.value)
   console.log('Applications:', applications.value)
@@ -370,7 +399,7 @@ const saveForm = () => {
 
 onMounted(() => {
   // In a real app, fetch mail data based on route params and populate form
-  const mailId = route.params.id
+  // const mailId = route.params.id
   // For now, using mock data that matches the mail detail
 })
 </script>
