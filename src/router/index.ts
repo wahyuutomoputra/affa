@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import LoginView from '../views/LoginView.vue'
-import DashboardView from '../views/DashboardView.vue'
-import MyTaskView from '../views/MyTaskView.vue'
-import MailDetailView from '../views/MailDetailView.vue'
-import AttachToWMSView from '../views/AttachToWMSView.vue'
-import TrademarkView from '../views/TrademarkView.vue'
-import TrademarkDetailView from '../views/TrademarkDetailView.vue'
-import UploadDocumentView from '../views/UploadDocumentView.vue'
+import LoginView from '../views/auth/LoginView.vue'
+import DashboardView from '../views/dashboard/DashboardView.vue'
+import MyTaskView from '../views/task/MyTaskView.vue'
+import MailDetailView from '../views/task/MailDetailView.vue'
+import AttachToWMSView from '../views/task/AttachToWMSView.vue'
+import TrademarkView from '../views/trademark/TrademarkView.vue'
+import TrademarkDetailView from '../views/trademark/TrademarkDetailView.vue'
+import UploadDocumentView from '../views/upload/UploadDocumentView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
