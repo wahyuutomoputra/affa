@@ -1,54 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import LoginView from '../views/auth/LoginView.vue'
-import DashboardView from '../views/dashboard/DashboardView.vue'
-import MyTaskView from '../views/task/MyTaskView.vue'
-import MailDetailView from '../views/task/MailDetailView.vue'
-import AttachToWMSView from '../views/task/AttachToWMSView.vue'
-import TrademarkView from '../views/trademark/TrademarkView.vue'
-import TrademarkDetailView from '../views/trademark/TrademarkDetailView.vue'
-import UploadDocumentView from '../views/upload/UploadDocumentView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'login',
-    component: LoginView,
+    component: () => import('../views/auth/LoginView.vue'),
   },
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: DashboardView,
+    component: () => import('../views/dashboard/DashboardView.vue'),
   },
   {
     path: '/my-task',
     name: 'my-task',
-    component: MyTaskView,
+    component: () => import('../views/task/MyTaskView.vue'),
   },
   {
     path: '/my-task/mail/:id',
     name: 'mail-detail',
-    component: MailDetailView,
+    component: () => import('../views/task/MailDetailView.vue'),
   },
   {
     path: '/my-task/mail/:id/attach',
     name: 'attach-to-wms',
-    component: AttachToWMSView,
+    component: () => import('../views/task/AttachToWMSView.vue'),
   },
   {
     path: '/trademark',
     name: 'trademark',
-    component: TrademarkView,
+    component: () => import('../views/trademark/TrademarkView.vue'),
   },
   {
     path: '/trademark/:refNumber',
     name: 'trademark-detail',
-    component: TrademarkDetailView,
+    component: () => import('../views/trademark/TrademarkDetailView.vue'),
   },
   {
     path: '/upload-document',
     name: 'upload-document',
-    component: UploadDocumentView,
+    component: () => import('../views/upload/UploadDocumentView.vue'),
   },
 ]
 

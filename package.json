@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "@tanstack/vue-query": "^5.92.0",
+    "axios": "^1.13.2",
     "chart.js": "^4.5.1",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",
@@ -21,6 +23,7 @@
     "vuetify": "^3.11.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "typescript": "^5.9.3",

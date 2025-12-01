@@ -200,11 +200,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
+import type { ExtractResponse } from '@/api/uploadApi'
+import { useUploadExtractMutation } from '@/composables/mutations/useUploadExtractMutation'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
-const isUploading = ref<boolean>(false)
-const extractedData = ref<any>(null)
+const extractedData = ref<ExtractResponse | null>(null)
 const error = ref<string | null>(null)
 
 const triggerFileUpload = (): void => {
@@ -258,67 +259,29 @@ const formatKey = (key: string): string => {
     .join(' ')
 }
 
-const uploadFile = async (): Promise<void> => {
-  if (!selectedFile.value) return
-
-  isUploading.value = true
-  error.value = null
-  extractedData.value = null
-
-  try {
-    const formData = new FormData()
-    formData.append('file', selectedFile.value)
-
-    // Gunakan proxy /api untuk menghindari CORS issue di development
-    const apiUrl = 'https://ekstrak-gold.vercel.app/extract'
-    
-    // Tambahkan headers jika diperlukan
-    const headers: Record<string, string> = {}
-    
-    // Jika ada API key di environment variable
-    const apiKey = import.meta.env.VITE_API_KEY
-    if (apiKey) {
-      headers['Authorization'] = `Bearer ${apiKey}`
-      // atau headers['X-API-Key'] = apiKey
-    }
-    
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      mode: 'cors',
-      headers: headers,
-      body: formData
-    })
-
-    // Cek apakah response berhasil
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('Error response:', errorText)
-      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
-    }
-
-    const data = await response.json()
-    console.log('Response data:', data)
-
-    if (data.success) {
-      extractedData.value = data
-    } else {
-      error.value = data.message || 'Gagal mengextract dokumen'
-    }
-  } catch (err) {
+const uploadMutation = useUploadExtractMutation(
+  (data) => {
+    extractedData.value = data
+  },
+  (err) => {
     console.error('Upload error:', err)
-    
-    // Pesan error yang lebih deskriptif
     const errorMessage = err instanceof Error ? err.message : String(err)
     if (errorMessage === 'Failed to fetch') {
-      error.value = 'Gagal terhubung ke server. Kemungkinan:\n• CORS policy blocked\n• API server tidak aktif\n• Koneksi internet bermasalah'
+      error.value =
+        'Gagal terhubung ke server. Kemungkinan:\n• CORS policy blocked\n• API server tidak aktif\n• Koneksi internet bermasalah'
     } else if (errorMessage.includes('HTTP error')) {
       error.value = `Server error: ${errorMessage}`
     } else {
       error.value = errorMessage || 'Terjadi kesalahan saat mengupload file'
     }
-  } finally {
-    isUploading.value = false
-  }
+  },
+)
+
+const isUploading = uploadMutation.isPending
+
+const uploadFile = async (): Promise<void> => {
+  if (!selectedFile.value) return
+  await uploadMutation.mutateAsync(selectedFile.value)
 }
 </script>
 

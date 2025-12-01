@@ -23,6 +23,17 @@ export default defineConfig({
         rewrite: (path: string) => path.replace(/^\/api/, '')
       }
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          'vuetify-vendor': ['vuetify'],
+          'chart-vendor': ['chart.js', 'vue-chartjs']
+        }
+      }
+    }
   }
 })
 
