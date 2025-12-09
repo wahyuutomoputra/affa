@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  affa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: affa-app
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=${VITE_API_URL:-https://your-api-url.com}
+    networks:
+      - affa-network
+
+networks:
+  affa-network:
+    driver: bridge
